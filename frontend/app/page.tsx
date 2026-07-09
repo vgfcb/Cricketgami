@@ -2,6 +2,7 @@ import { api } from "@/lib/api";
 import SearchBox from "../components/ui/searchbox";
 import Link from "next/link";
 import FeaturedBatgami from "../components/ui/featuredbatgami";
+export const dynamic = "force-dynamic";
 const { data: featured } = await api.get("/random");
 export default function Home() {
   return (
