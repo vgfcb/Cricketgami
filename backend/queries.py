@@ -147,6 +147,38 @@ def get_player(name: str):
     conn.close()
 
     return innings
+def get_player_summary(name: str):
+
+    conn = get_connection()
+    cur = conn.cursor()
+
+    cur.execute("""
+        SELECT
+            COUNT(*) AS innings,
+            MAX(runs) AS highest_score,
+            ROUND(
+                SUM(runs) * 100.0 / SUM(balls),
+                1
+            ) AS strike_rate,
+            SUM(fours) AS fours,
+            SUM(sixes) AS sixes
+        FROM batting_innings
+        WHERE batter LIKE ?
+    """, (f"%{name}%",))
+
+    summary = dict(cur.fetchone())
+
+    cur.execute("""
+        SELECT COUNT(*) AS created
+        FROM batgamis
+        WHERE first_batter LIKE ?
+    """, (f"%{name}%",))
+
+    summary["batgamis_created"] = cur.fetchone()["created"]
+
+    conn.close()
+
+    return summary
 
 
 def get_created_batgamis(player: str):
@@ -324,6 +356,8 @@ if __name__ == "__main__":
 
     print(get_created_batgamis("SS Iyer"))
 
+    print()
+    print(get_player_summary("SS Iyer"))
     print()
 
     print(get_leaderboard())

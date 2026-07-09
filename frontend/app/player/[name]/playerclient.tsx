@@ -6,175 +6,296 @@ import Link from "next/link";
 function formatDate(date: string) {
   return new Date(date).toLocaleDateString("en-GB", {
     day: "numeric",
-    month: "long",
+    month: "short",
     year: "numeric",
   });
+}
+
+function getInitials(name: string) {
+  return name
+    .split(" ")
+    .map((n: string) => n[0])
+    .slice(0, 2)
+    .join("")
+    .toUpperCase();
+}
+
+function Stat({
+  value,
+  label,
+}: {
+  value: string | number;
+  label: string;
+}) {
+  return (
+    <div className="flex flex-col items-center justify-center py-5">
+      <p className="text-2xl font-bold text-blue-400">
+        {value}
+      </p>
+
+      <p className="mt-1 text-[11px] uppercase tracking-[0.2em] text-zinc-500">
+        {label}
+      </p>
+    </div>
+  );
 }
 
 export default function PlayerClient({ data }: any) {
   const [tab, setTab] = useState("innings");
 
   return (
-    <main className="min-h-screen bg-zinc-950 text-white">
-      <div className="mx-auto max-w-5xl px-5 py-10">
+    <main className="min-h-screen bg-[#090b12] text-white">
 
-        <h1 className="text-5xl font-bold tracking-tight">
-          {data.player}
-        </h1>
+      <div className="mx-auto max-w-6xl px-6 py-10">
 
-        {/* Summary */}
-        <div className="mt-8 grid grid-cols-2 gap-4">
+        {/* HEADER */}
 
-          <div className="rounded-2xl border border-zinc-800 bg-zinc-900 p-6">
-            <p className="text-4xl font-bold">
-              {data.summary.innings}
-            </p>
+        <div className="flex items-center gap-5">
 
-            <p className="mt-2 text-zinc-400">
-              IPL Innings
-            </p>
+          <div className="flex h-16 w-16 items-center justify-center rounded-full bg-blue-600 text-2xl font-bold">
+            {getInitials(data.player)}
           </div>
 
-          <div className="rounded-2xl border border-zinc-800 bg-zinc-900 p-6">
-            <p className="text-4xl font-bold">
-              {data.summary.batgamis_created}
+          <div>
+
+            <h1 className="text-3xl font-bold">
+              {data.player}
+            </h1>
+
+            <p className="mt-1 text-sm text-zinc-400">
+              {data.summary.batgamis_created} BatGamis Created •{" "}
+              {data.summary.innings} IPL Innings
             </p>
 
-            <p className="mt-2 text-zinc-400">
-              BatGamis Created
-            </p>
           </div>
 
         </div>
 
-        {/* Tabs */}
+        {/* STATS */}
 
-        <div className="mt-10 flex gap-8 border-b border-zinc-800">
+        <div className="mt-8 overflow-hidden rounded-3xl border border-zinc-800 bg-[#111827]">
 
-          <button
-            onClick={() => setTab("innings")}
-            className={`pb-3 ${
-              tab === "innings"
-                ? "border-b-2 border-white font-semibold"
-                : "text-zinc-500"
-            }`}
-          >
-            Recent Innings
-          </button>
+          <div className="grid grid-cols-5 divide-x divide-zinc-800">
 
-          <button
-            onClick={() => setTab("batgamis")}
-            className={`pb-3 ${
-              tab === "batgamis"
-                ? "border-b-2 border-white font-semibold"
-                : "text-zinc-500"
-            }`}
-          >
-            BatGamis
-          </button>
+            <Stat
+              value={data.summary.innings}
+              label="INN"
+            />
+
+            <Stat
+              value={data.summary.highest_score}
+              label="HIGH"
+            />
+
+            <Stat
+              value={data.summary.strike_rate}
+              label="SR"
+            />
+
+            <Stat
+              value={data.summary.fours}
+              label="4s"
+            />
+
+            <Stat
+              value={data.summary.sixes}
+              label="6s"
+            />
+
+          </div>
 
         </div>
 
-        {/* Recent Innings */}
+        {/* TABS */}
+
+        <div className="mt-10 flex items-center justify-between border-b border-zinc-800">
+
+          <div className="flex gap-8">
+
+            <button
+              onClick={() => setTab("innings")}
+              className={`pb-4 transition ${
+                tab === "innings"
+                  ? "border-b-2 border-blue-500 font-semibold text-white"
+                  : "text-zinc-500 hover:text-white"
+              }`}
+            >
+              All Innings
+            </button>
+
+            <button
+              onClick={() => setTab("batgamis")}
+              className={`pb-4 transition ${
+                tab === "batgamis"
+                  ? "border-b-2 border-blue-500 font-semibold text-white"
+                  : "text-zinc-500 hover:text-white"
+              }`}
+            >
+              BatGamis
+            </button>
+
+          </div>
+
+          <p className="pb-4 text-sm text-zinc-500">
+
+            {tab === "innings"
+              ? `${data.innings.length} Results`
+              : `${data.created.length} Results`}
+
+          </p>
+
+        </div>
+                {/* ALL INNINGS */}
 
         {tab === "innings" && (
 
-          <div className="mt-8 space-y-5">
+          <div className="mt-8 space-y-4">
 
             {data.innings.map((inning: any, index: number) => (
 
-              <div
+              <Link
                 key={index}
-                className="rounded-2xl border border-zinc-800 bg-zinc-900 p-6"
+                href={`/batgami/${inning.runs}/${inning.balls}`}
+                className="block rounded-2xl border border-zinc-800 bg-[#111827] p-5 transition-all hover:-translate-y-1 hover:border-blue-500 hover:bg-[#172033]"
               >
 
-                {inning.is_batgami && (
-                  <div className="mb-4 inline-flex rounded-full bg-yellow-500 px-3 py-1 text-xs font-bold text-black">
-                    ⭐ BATGAMI
+                <div className="flex items-start justify-between gap-6">
+
+                  {/* LEFT */}
+
+                  <div className="flex-1">
+
+                    <div className="flex items-center gap-3">
+
+                      <h2 className="text-2xl font-bold">
+                        {inning.runs} ({inning.balls})
+                      </h2>
+
+                      {inning.is_batgami && (
+                        <span className="rounded-full border border-blue-500/40 bg-blue-500/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-wider text-blue-400">
+                          BatGami
+                        </span>
+                      )}
+
+                    </div>
+
+                    <p className="mt-2 text-sm text-zinc-500">
+                      {formatDate(inning.date)}
+                    </p>
+
+                    <p className="mt-3 text-[15px] text-zinc-200">
+                      {inning.batting_team} vs {inning.bowling_team}
+                    </p>
+
+                    <div className="mt-4 flex flex-wrap gap-5 text-sm text-zinc-400">
+
+                      <span>
+                        <span className="font-semibold text-white">
+                          {inning.fours}
+                        </span>{" "}
+                        ×4
+                      </span>
+
+                      <span>
+                        <span className="font-semibold text-white">
+                          {inning.sixes}
+                        </span>{" "}
+                        ×6
+                      </span>
+
+                    </div>
+
                   </div>
-                )}
 
-                <Link
-                  href={`/batgami/${inning.runs}/${inning.balls}`}
-                  className="text-3xl font-bold hover:text-blue-400"
-                >
-                  {inning.runs} ({inning.balls})
-                </Link>
+                  {/* RIGHT */}
 
-                <p className="mt-3 text-sm text-zinc-500">
-                  {formatDate(inning.date)}
-                </p>
+                  <div className="text-right">
 
-                <p className="mt-2">
-                  {inning.batting_team} vs {inning.bowling_team}
-                </p>
+                    <p className="text-xs uppercase tracking-widest text-zinc-500">
+                      Venue
+                    </p>
 
-                <p className="mt-3 text-zinc-400">
-                  {inning.fours}×4 • {inning.sixes}×6
-                </p>
+                    <p className="mt-2 max-w-[180px] text-sm text-zinc-300">
+                      {inning.venue}
+                    </p>
 
-                <p className="mt-3 text-sm text-zinc-500">
-                  {inning.venue}
-                </p>
+                  </div>
 
-              </div>
+                </div>
+
+              </Link>
 
             ))}
 
           </div>
 
         )}
-
-        {/* BatGamis */}
+                {/* BATGAMIS */}
 
         {tab === "batgamis" && (
 
-          <div className="mt-8 space-y-5">
+          <div className="mt-8 space-y-4">
 
             {data.created.map((gami: any, index: number) => (
 
               <Link
                 key={index}
                 href={`/batgami/${gami.runs}/${gami.balls}`}
-                className="block rounded-2xl border border-yellow-600 bg-zinc-900 p-6 hover:border-yellow-400"
+                className="block rounded-2xl border border-zinc-800 bg-[#111827] p-5 transition-all hover:-translate-y-1 hover:border-blue-500 hover:bg-[#172033]"
               >
 
-                <div className="mb-3 inline-flex rounded-full bg-yellow-500 px-3 py-1 text-xs font-bold text-black">
-                  ⭐ CREATED BATGAMI
-                </div>
+                <div className="flex items-start justify-between gap-6">
 
-                <h2 className="text-3xl font-bold">
-                  {gami.runs} ({gami.balls})
-                </h2>
-
-                <p className="mt-3 text-zinc-400">
-                  First Created
-                </p>
-
-                <p className="text-lg">
-                  {formatDate(gami.first_date)}
-                </p>
-
-                <div className="mt-5 flex gap-8">
+                  {/* LEFT */}
 
                   <div>
-                    <p className="text-2xl font-bold">
-                      {gami.occurrences}
+
+                    <div className="mb-3 inline-flex rounded-full border border-blue-500/40 bg-blue-500/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-wider text-blue-400">
+                      Created BatGami
+                    </div>
+
+                    <h2 className="text-2xl font-bold">
+                      {gami.runs} ({gami.balls})
+                    </h2>
+
+                    <p className="mt-2 text-sm text-zinc-500">
+                      First Created
                     </p>
 
-                    <p className="text-zinc-500">
-                      Occurrences
+                    <p className="text-sm text-zinc-300">
+                      {formatDate(gami.first_date)}
                     </p>
+
                   </div>
 
-                  <div>
-                    <p className="text-2xl font-bold">
-                      {gami.unique_pathways}
-                    </p>
+                  {/* RIGHT */}
 
-                    <p className="text-zinc-500">
-                      Pathways
-                    </p>
+                  <div className="flex gap-8 text-center">
+
+                    <div>
+
+                      <p className="text-2xl font-bold text-blue-400">
+                        {gami.occurrences}
+                      </p>
+
+                      <p className="mt-1 text-[11px] uppercase tracking-widest text-zinc-500">
+                        Occurrences
+                      </p>
+
+                    </div>
+
+                    <div>
+
+                      <p className="text-2xl font-bold text-blue-400">
+                        {gami.unique_pathways}
+                      </p>
+
+                      <p className="mt-1 text-[11px] uppercase tracking-widest text-zinc-500">
+                        Pathways
+                      </p>
+
+                    </div>
+
                   </div>
 
                 </div>
@@ -188,6 +309,7 @@ export default function PlayerClient({ data }: any) {
         )}
 
       </div>
+
     </main>
   );
 }

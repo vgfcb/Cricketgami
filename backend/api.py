@@ -6,6 +6,7 @@ from queries import (
     get_leaderboard,
     get_occurrences,
     get_pathways,
+    get_player_summary,
     random_batgami,
     search_players,
     get_player,
@@ -68,18 +69,14 @@ def player(name: str):
 
     innings = get_player(name)
     created = get_created_batgamis(name)
+    summary = get_player_summary(name)
 
     return {
         "player": name,
-        "summary": {
-            "innings": len(innings),
-            "batgamis_created": len(created)
-        },
+        "summary": summary,
         "innings": innings,
         "created": created
     }
-
-
 from typing import Optional
 
 @app.get("/leaderboard")
