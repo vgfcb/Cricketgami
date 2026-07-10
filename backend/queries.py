@@ -326,6 +326,69 @@ def get_similar(runs, balls, radius=5):
     conn.close()
 
     return rows
+def get_homepage_stats():
+
+    conn = get_connection()
+    cur = conn.cursor()
+
+    cur.execute("""
+        SELECT
+            CAST(substr(date, 1, 4) AS INTEGER) AS season,
+            COUNT(*) AS innings
+        FROM batting_innings
+        GROUP BY season
+        ORDER BY season
+    """)
+
+    innings = {
+        row["season"]: row["innings"]
+        for row in cur.fetchall()
+    }
+
+    cur.execute("""
+        SELECT
+            CAST(substr(first_date, 1, 4) AS INTEGER) AS season,
+            COUNT(*) AS batgamis
+        FROM batgamis
+        GROUP BY season
+        ORDER BY season
+    """)
+
+    batgamis = {
+        row["season"]: row["batgamis"]
+        for row in cur.fetchall()
+    }
+
+    seasons = []
+
+    total_innings = 0
+    total_batgamis = 0
+
+    for year in sorted(innings.keys()):
+
+        inn = innings.get(year, 0)
+        bg = batgamis.get(year, 0)
+
+        total_innings += inn
+        total_batgamis += bg
+
+        seasons.append({
+            "year": year,
+            "innings": inn,
+            "batgamis": bg,
+            "rate": round(bg * 100 / inn, 1) if inn else 0
+        })
+
+    conn.close()
+
+    return {
+        "all_time": {
+            "innings": total_innings,
+            "batgamis": total_batgamis,
+            "rate": round(total_batgamis * 100 / total_innings, 1)
+        },
+        "seasons": seasons
+    }
 
 
 # =====================================================

@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from queries import (
     get_batgami,
+    get_homepage_stats,
     get_leaderboard,
     get_occurrences,
     get_pathways,
@@ -91,3 +92,6 @@ def leaderboard(
 def get_heat():
 
     return heatmap()
+@app.get("/homepage-stats")
+def homepage_stats():
+    return get_homepage_stats()
