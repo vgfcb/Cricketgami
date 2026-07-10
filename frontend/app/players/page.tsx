@@ -28,7 +28,7 @@ export default function PlayersPage() {
 
   return (
     <main className="min-h-screen bg-zinc-950 text-white">
-      <div className="mx-auto max-w-5xl px-6 py-12">
+      <div className="mx-auto max-w-5xl px-5 py-10 sm:px-6 sm:py-12">
 
         {/* Hero */}
 
@@ -36,11 +36,11 @@ export default function PlayersPage() {
           Leaderboard
         </p>
 
-        <h1 className="mt-2 text-6xl font-black tracking-tight">
+        <h1 className="mt-2 text-5xl font-black tracking-tight sm:text-6xl">
           Players
         </h1>
 
-        <p className="mt-3 text-xl text-zinc-400">
+        <p className="mt-3 text-lg text-zinc-400 sm:text-xl">
           Ranked by BatGamis created
         </p>
 
@@ -50,7 +50,7 @@ export default function PlayersPage() {
 
         {/* Filters */}
 
-        <div className="mt-8 flex items-center gap-4">
+        <div className="mt-8 flex flex-wrap items-center gap-3">
 
           <span className="text-zinc-400">
             Season
@@ -87,7 +87,7 @@ export default function PlayersPage() {
             <Link
               key={player.first_batter}
               href={`/player/${encodeURIComponent(player.first_batter)}`}
-              className={`flex items-center justify-between px-6 py-6 transition hover:bg-zinc-800/50 ${
+              className={`flex items-center justify-between px-4 py-5 transition hover:bg-zinc-800/50 sm:px-6 sm:py-6 ${
                 index !== players.length - 1
                   ? "border-b border-zinc-800"
                   : ""
@@ -100,17 +100,17 @@ export default function PlayersPage() {
 
               {/* LEFT */}
 
-              <div className="flex items-center gap-5">
+              <div className="flex min-w-0 items-center gap-3 sm:gap-5">
 
-                {/* Rank */}
+                {/* Rank (Desktop Only) */}
 
                 {index === 0 ? (
-                  <div className="flex h-12 w-12 items-center justify-center rounded-xl border border-yellow-700 bg-yellow-900/20">
+                  <div className="hidden h-12 w-12 items-center justify-center rounded-xl border border-yellow-700 bg-yellow-900/20 sm:flex">
                     ⭐
                   </div>
                 ) : (
                   <div
-                    className={`flex h-12 w-12 items-center justify-center rounded-xl border font-bold
+                    className={`hidden h-12 w-12 items-center justify-center rounded-xl border font-bold sm:flex
                     ${
                       index === 1
                         ? "border-blue-700 text-blue-300"
@@ -125,21 +125,24 @@ export default function PlayersPage() {
 
                 {/* Initials */}
 
-                <div className="flex h-12 w-12 items-center justify-center rounded-full border border-blue-700 bg-blue-950 font-bold text-blue-400">
+                <div
+                  className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full border font-bold sm:h-12 sm:w-12
+                  ${
+                    index === 0
+                      ? "border-yellow-700 bg-yellow-900/20 text-yellow-400"
+                      : "border-blue-700 bg-blue-950/60 text-blue-400"
+                  }`}
+                >
                   {initials(player.first_batter)}
                 </div>
 
                 {/* Name */}
 
-                <div>
+                <div className="min-w-0">
 
-                  <h2 className="text-2xl font-bold">
+                  <h2 className="truncate text-lg font-bold leading-tight sm:text-2xl">
                     {player.first_batter}
                   </h2>
-
-                  <p className="mt-1 text-sm text-zinc-500">
-                    Rank #{index + 1}
-                  </p>
 
                 </div>
 
@@ -147,10 +150,10 @@ export default function PlayersPage() {
 
               {/* RIGHT */}
 
-              <div className="text-right">
+              <div className="ml-4 shrink-0 text-right">
 
                 <p
-                  className={`text-5xl font-black ${
+                  className={`text-4xl font-black sm:text-5xl ${
                     index === 0
                       ? "text-yellow-400"
                       : index === 1
@@ -163,7 +166,7 @@ export default function PlayersPage() {
                   {player.created}
                 </p>
 
-                <p className="mt-1 text-xs uppercase tracking-[0.25em] text-zinc-500">
+                <p className="mt-1 text-[10px] uppercase tracking-[0.15em] text-zinc-500 sm:text-xs">
                   BatGamis
                 </p>
 
