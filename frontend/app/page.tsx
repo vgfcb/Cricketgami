@@ -24,6 +24,8 @@ export default async function Home() {
           </h1>
 
           <p className="mt-5 text-xl text-zinc-400">
+            Every unique runs + balls combination in IPL history is a BatGami.
+            
             Search every unique IPL batting innings.
           </p>
 
