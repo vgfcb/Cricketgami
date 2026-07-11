@@ -35,16 +35,12 @@ export default function HomeClient({
 
         <div className="text-center">
 
-          <p className="text-xs font-bold uppercase tracking-[0.45em] text-blue-400">
-            IPL Analytics
-          </p>
-
-          <h1 className="mt-3 text-6xl font-black font-sans uppercase tracking-[-0.08em] md:text-7xl">
+          <h1 className="mt-3 text-5xl font-medium font-sans uppercase tracking-[-0.04em] md:text-6xl">
             BATGAMI
           </h1>
 
-          <p className="mx-auto mt-4 max-w-2xl text-base leading-7 text-zinc-400 md:text-lg">
-            Every unique runs + balls combination in IPL history.
+          <p className="mx-auto mt-4 max-w-2xl text-sm leading-6 text-zinc-400 md:text-base">
+            Batgami tracks every batting stat line (runs,balls) in IPL history. When a batter scores a line that has never been scored before, that's a Batgami!
           </p>
 
         </div>
