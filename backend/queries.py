@@ -224,7 +224,33 @@ def search_players(query: str):
 
     return players
 
+# =====================================================
+# RUNS SEARCH
+# =====================================================
 
+def get_runs(runs: int):
+
+    conn = get_connection()
+    cur = conn.cursor()
+
+    cur.execute("""
+        SELECT
+            runs,
+            balls,
+            occurrences,
+            first_batter,
+            first_date,
+            unique_pathways
+        FROM batgamis
+        WHERE runs=?
+        ORDER BY balls
+    """, (runs,))
+
+    rows = [dict(r) for r in cur.fetchall()]
+
+    conn.close()
+
+    return rows
 # =====================================================
 # LEADERBOARDS
 # =====================================================

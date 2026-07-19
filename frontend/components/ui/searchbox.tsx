@@ -10,8 +10,16 @@ export default function SearchBox() {
   const router = useRouter();
 
   const handleSearch = () => {
-    if (!runs || !balls) return;
+    // Runs is required
+    if (!runs) return;
 
+    // Balls left blank -> show all BatGamis with that runs value
+    if (!balls) {
+      router.push(`/runs/${runs}`);
+      return;
+    }
+
+    // Runs + Balls -> specific BatGami
     router.push(`/batgami/${runs}/${balls}`);
   };
 
@@ -24,23 +32,25 @@ export default function SearchBox() {
   return (
     <div className="w-full max-w-md space-y-4">
       <div className="grid grid-cols-2 gap-4">
+
         <input
           type="number"
           placeholder="Runs"
           value={runs}
           onChange={(e) => setRuns(e.target.value)}
           onKeyDown={handleKeyDown}
-          className="rounded-lg border border-zinc-700 bg-zinc-900 px-4 py-3 text-white outline-none focus:border-white"
+          className="rounded-lg border border-zinc-700 bg-zinc-900 px-4 py-3 text-white outline-none focus:border-blue-500"
         />
 
         <input
           type="number"
-          placeholder="Balls"
+          placeholder="Balls (optional)"
           value={balls}
           onChange={(e) => setBalls(e.target.value)}
           onKeyDown={handleKeyDown}
-          className="rounded-lg border border-zinc-700 bg-zinc-900 px-4 py-3 text-white outline-none focus:border-white"
+          className="rounded-lg border border-zinc-700 bg-zinc-900 px-4 py-3 text-white outline-none focus:border-blue-500"
         />
+
       </div>
 
       <button

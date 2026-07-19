@@ -8,6 +8,7 @@ from queries import (
     get_occurrences,
     get_pathways,
     get_player_summary,
+    get_runs,
     random_batgami,
     search_players,
     get_player,
@@ -95,3 +96,13 @@ def get_heat():
 @app.get("/homepage-stats")
 def homepage_stats():
     return get_homepage_stats()
+@app.get("/runs/{runs}")
+def runs_page(runs: int):
+
+    rows = get_runs(runs)
+
+    return {
+        "runs": runs,
+        "count": len(rows),
+        "batgamis": rows
+    }
