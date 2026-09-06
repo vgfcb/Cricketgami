@@ -26,7 +26,6 @@ export default function HomeClient({
 
   return (
     <main className="relative min-h-screen overflow-hidden bg-[#0a0f0c] text-white">
-      {/* Ambient glow */}
       <div className="pointer-events-none absolute left-1/2 top-0 h-[400px] w-[700px] -translate-x-1/2 rounded-full bg-emerald-500/10 blur-[100px]" />
       <div className="pointer-events-none absolute right-0 top-20 h-[300px] w-[300px] rounded-full bg-yellow-500/10 blur-[90px]" />
 
@@ -49,45 +48,15 @@ export default function HomeClient({
           </p>
         </div>
 
-        {/* SEARCH */}
+        {/* FEATURED — compact, right after hero as the hook */}
         <div className="mt-5">
-          <SearchBox />
-        </div>
-
-        {/* YEAR SELECTOR */}
-        <div className="mt-6">
-          <div className="mb-3 flex items-center justify-center gap-4">
-            <button
-              disabled={index === 0}
-              onClick={() => setIndex(index - 1)}
-              className="flex h-8 w-8 items-center justify-center rounded-full border border-zinc-800 bg-[#121813] transition hover:border-yellow-500/50 hover:bg-[#1a221b] disabled:cursor-not-allowed disabled:opacity-20"
-            >
-              <ChevronLeft size={16} />
-            </button>
-
-            <h2 className="w-20 text-center text-2xl font-black tabular-nums">
-              {season.year}
-            </h2>
-
-            <button
-              disabled={index === latestIndex}
-              onClick={() => setIndex(index + 1)}
-              className="flex h-8 w-8 items-center justify-center rounded-full border border-zinc-800 bg-[#121813] transition hover:border-yellow-500/50 hover:bg-[#1a221b] disabled:cursor-not-allowed disabled:opacity-20"
-            >
-              <ChevronRight size={16} />
-            </button>
-          </div>
-
-          {/* STATS */}
-          <div className="grid grid-cols-3 gap-3">
-            <StatCard value={season.batgamis} label="BatGamis" accent="gold" />
-            <StatCard value={season.innings} label="Innings" accent="green" />
-            <StatCard value={`${season.rate}%`} label="Rate" accent="gold" />
+          <div className="rounded-xl border border-zinc-800 bg-[#121813] p-3 [&_*]:!text-sm">
+            <FeaturedBatgami initialData={featured} />
           </div>
         </div>
 
         {/* EXPLORE */}
-        <div className="mt-8">
+        <div className="mt-6">
           <p className="mb-3 text-[10px] font-bold uppercase tracking-[0.35em] text-zinc-500">
             Explore
           </p>
@@ -115,12 +84,45 @@ export default function HomeClient({
           </div>
         </div>
 
-        {/* FEATURED */}
-        <div className="mt-8">
+        {/* SEARCH */}
+        <div className="mt-6">
           <p className="mb-3 text-[10px] font-bold uppercase tracking-[0.35em] text-zinc-500">
-            Featured
+            Find a line
           </p>
-          <FeaturedBatgami initialData={featured} />
+          <SearchBox />
+        </div>
+
+        {/* STATS + YEAR SELECTOR — merged into one block */}
+        <div className="mt-6">
+          <div className="rounded-xl border border-zinc-800 bg-[#121813] p-4">
+            <div className="mb-3 flex items-center justify-center gap-4">
+              <button
+                disabled={index === 0}
+                onClick={() => setIndex(index - 1)}
+                className="flex h-7 w-7 items-center justify-center rounded-full border border-zinc-700 bg-[#0a0f0c] transition hover:border-yellow-500/50 disabled:cursor-not-allowed disabled:opacity-20"
+              >
+                <ChevronLeft size={14} />
+              </button>
+
+              <h2 className="w-16 text-center text-xl font-black tabular-nums">
+                {season.year}
+              </h2>
+
+              <button
+                disabled={index === latestIndex}
+                onClick={() => setIndex(index + 1)}
+                className="flex h-7 w-7 items-center justify-center rounded-full border border-zinc-700 bg-[#0a0f0c] transition hover:border-yellow-500/50 disabled:cursor-not-allowed disabled:opacity-20"
+              >
+                <ChevronRight size={14} />
+              </button>
+            </div>
+
+            <div className="grid grid-cols-3 gap-3">
+              <StatCard value={season.batgamis} label="BatGamis" accent="gold" />
+              <StatCard value={season.innings} label="Innings" accent="green" />
+              <StatCard value={`${season.rate}%`} label="Rate" accent="gold" />
+            </div>
+          </div>
         </div>
 
       </div>
@@ -138,16 +140,10 @@ function StatCard({
   accent: "gold" | "green";
 }) {
   const color = accent === "gold" ? "text-yellow-400" : "text-emerald-400";
-  const glow =
-    accent === "gold"
-      ? "hover:shadow-[0_0_25px_-12px_rgba(234,179,8,0.5)] hover:border-yellow-500/40"
-      : "hover:shadow-[0_0_25px_-12px_rgba(16,185,129,0.5)] hover:border-emerald-500/40";
 
   return (
-    <div
-      className={`rounded-xl border border-zinc-800 bg-[#121813] py-3 text-center transition ${glow}`}
-    >
-      <p className={`text-3xl font-black tabular-nums ${color}`}>{value}</p>
+    <div className="rounded-lg bg-[#0a0f0c] py-3 text-center">
+      <p className={`text-2xl font-black tabular-nums ${color}`}>{value}</p>
       <p className="mt-1 text-[10px] uppercase tracking-[0.3em] text-zinc-500">
         {label}
       </p>
