@@ -48,11 +48,45 @@ export default function HomeClient({
           </p>
         </div>
 
-        {/* FEATURED — compact, right after hero as the hook */}
+        {/* STATS + YEAR SELECTOR */}
         <div className="mt-5">
-          <div className="rounded-xl border border-zinc-800 bg-[#121813] p-3 [&_*]:!text-sm">
-            <FeaturedBatgami initialData={featured} />
+          <div className="rounded-xl border border-zinc-800 bg-[#121813] p-4">
+            <div className="mb-3 flex items-center justify-center gap-4">
+              <button
+                disabled={index === 0}
+                onClick={() => setIndex(index - 1)}
+                className="flex h-7 w-7 items-center justify-center rounded-full border border-zinc-700 bg-[#0a0f0c] transition hover:border-yellow-500/50 disabled:cursor-not-allowed disabled:opacity-20"
+              >
+                <ChevronLeft size={14} />
+              </button>
+
+              <h2 className="w-16 text-center text-xl font-black tabular-nums">
+                {season.year}
+              </h2>
+
+              <button
+                disabled={index === latestIndex}
+                onClick={() => setIndex(index + 1)}
+                className="flex h-7 w-7 items-center justify-center rounded-full border border-zinc-700 bg-[#0a0f0c] transition hover:border-yellow-500/50 disabled:cursor-not-allowed disabled:opacity-20"
+              >
+                <ChevronRight size={14} />
+              </button>
+            </div>
+
+            <div className="grid grid-cols-3 gap-3">
+              <StatCard value={season.batgamis} label="BatGamis" accent="gold" />
+              <StatCard value={season.innings} label="Innings" accent="green" />
+              <StatCard value={`${season.rate}%`} label="Rate" accent="gold" />
+            </div>
           </div>
+        </div>
+
+        {/* SEARCH */}
+        <div className="mt-6">
+          <p className="mb-3 text-[10px] font-bold uppercase tracking-[0.35em] text-zinc-500">
+            Find a line
+          </p>
+          <SearchBox />
         </div>
 
         {/* EXPLORE */}
@@ -84,43 +118,14 @@ export default function HomeClient({
           </div>
         </div>
 
-        {/* SEARCH */}
+        {/* FEATURED — scaled down and height-capped */}
         <div className="mt-6">
           <p className="mb-3 text-[10px] font-bold uppercase tracking-[0.35em] text-zinc-500">
-            Find a line
+            Featured
           </p>
-          <SearchBox />
-        </div>
-
-        {/* STATS + YEAR SELECTOR — merged into one block */}
-        <div className="mt-6">
-          <div className="rounded-xl border border-zinc-800 bg-[#121813] p-4">
-            <div className="mb-3 flex items-center justify-center gap-4">
-              <button
-                disabled={index === 0}
-                onClick={() => setIndex(index - 1)}
-                className="flex h-7 w-7 items-center justify-center rounded-full border border-zinc-700 bg-[#0a0f0c] transition hover:border-yellow-500/50 disabled:cursor-not-allowed disabled:opacity-20"
-              >
-                <ChevronLeft size={14} />
-              </button>
-
-              <h2 className="w-16 text-center text-xl font-black tabular-nums">
-                {season.year}
-              </h2>
-
-              <button
-                disabled={index === latestIndex}
-                onClick={() => setIndex(index + 1)}
-                className="flex h-7 w-7 items-center justify-center rounded-full border border-zinc-700 bg-[#0a0f0c] transition hover:border-yellow-500/50 disabled:cursor-not-allowed disabled:opacity-20"
-              >
-                <ChevronRight size={14} />
-              </button>
-            </div>
-
-            <div className="grid grid-cols-3 gap-3">
-              <StatCard value={season.batgamis} label="BatGamis" accent="gold" />
-              <StatCard value={season.innings} label="Innings" accent="green" />
-              <StatCard value={`${season.rate}%`} label="Rate" accent="gold" />
+          <div className="max-h-40 overflow-hidden rounded-xl border border-zinc-800 bg-[#121813]">
+            <div className="origin-top scale-[0.8] p-2 [&_*]:!text-xs [&_svg]:!h-4 [&_svg]:!w-4 [&_img]:!h-10 [&_img]:!w-10">
+              <FeaturedBatgami initialData={featured} />
             </div>
           </div>
         </div>
